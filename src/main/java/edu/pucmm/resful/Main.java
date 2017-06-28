@@ -47,7 +47,7 @@ public class Main {
         //rutas servicios RESTFUL
         path("/rest",() -> {
             //filtros especificos:
-            after("/*", (request, response) -> { //indicando que todas las llamadas retorna un json.
+            afterAfter("/*", (request, response) -> { //indicando que todas las llamadas retorna un json.
                 response.header("Content-Type", ACCEPT_TYPE);
             });
             //rutas del api
@@ -77,7 +77,6 @@ public class Main {
 
                 //eliminar un estudiante
                 delete("/:matricula", (request, response) -> {
-                    Estudiante estudiante = new Gson().fromJson(request.body(), Estudiante.class);
                     return estudianteService.eliminarEstudiante(Integer.parseInt(request.params("matricula")));
                 }, JsonUtilidades.json());
 

@@ -63,7 +63,7 @@ public class EstudianteService {
      * @return
      */
     public Estudiante actualizarEstudiante(Estudiante estudiante){
-         Estudiante tmp = listaEstudiantes.stream().filter(est -> est.getMatricula() == estudiante.getMatricula()).findAny().orElse(null);
+         Estudiante tmp = getEstudiante(estudiante.getMatricula());
          if(tmp==null){
              throw new IllegalArgumentException(String.format("El estudiante con matricula %d no existe.", estudiante.getMatricula()));
          }
