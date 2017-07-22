@@ -1,6 +1,5 @@
 package edu.pucmm.resful;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import edu.pucmm.resful.encapsulaciones.ErrorRespuesta;
 import edu.pucmm.resful.encapsulaciones.Estudiante;
@@ -16,7 +15,8 @@ import static spark.Spark.*;
  */
 public class Main {
 
-    public final static String ACCEPT_TYPE = "application/json";
+    public final static String ACCEPT_TYPE_JSON = "application/json";
+    public final static String ACCEPT_TYPE_XML = "application/xml";
     public final static int  BAD_REQUEST = 400;
     public final static int  ERROR_INTERNO = 500;
 
@@ -48,7 +48,7 @@ public class Main {
         path("/rest",() -> {
             //filtros especificos:
             afterAfter("/*", (request, response) -> { //indicando que todas las llamadas retorna un json.
-                response.header("Content-Type", ACCEPT_TYPE);
+                response.header("Content-Type", ACCEPT_TYPE_JSON);
             });
             //rutas del api
             path("/estudiantes", () -> {
@@ -64,13 +64,19 @@ public class Main {
                 }, JsonUtilidades.json());
 
                 //crea un estudiante
-                post("/", Main.ACCEPT_TYPE, (request, response) -> {
+                post("/", Main.ACCEPT_TYPE_JSON, (request, response) -> {
                     Estudiante estudiante = new Gson().fromJson(request.body(), Estudiante.class);
                     return estudianteService.crearEstudiante(estudiante);
                 }, JsonUtilidades.json());
 
+                //crea un estudiante
+                post("/", Main.ACCEPT_TYPE_XML, (request, response) -> {
+                    System.out.println("Ejecutado por la llamada XMl");
+                    return new Estudiante(20011136, "aasdad");
+                }, JsonUtilidades.json());
+
                 //actualiza un estudiante
-                put("/", Main.ACCEPT_TYPE, (request, response) -> {
+                put("/", Main.ACCEPT_TYPE_JSON, (request, response) -> {
                     Estudiante estudiante = new Gson().fromJson(request.body(), Estudiante.class);
                     return estudianteService.actualizarEstudiante(estudiante);
                 }, JsonUtilidades.json());
