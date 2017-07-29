@@ -1,14 +1,26 @@
 package edu.pucmm.resful.encapsulaciones;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 /**
  * Created by vacax on 26/06/17.
  */
+@Root
 public class Estudiante {
 
-    int matricula;
-    String nombre;
-    String correo;
-    String carrera;
+    @Element
+    private int matricula;
+    @Element
+    private String nombre;
+    @Element(required = false)
+    private String correo;
+    @Element(required = false)
+    private String carrera;
+
+    public Estudiante() {
+    }   
+    
 
     public Estudiante(int matricula, String nombre) {
         this.matricula = matricula;

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * Clase utilizando el patrón Singleton
  * Created by vacax on 26/06/17.
  */
 public class EstudianteService {
