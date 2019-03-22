@@ -104,7 +104,7 @@ public class Main {
                     return estudianteService.crearEstudiante(estudiante);
                 }, JsonUtilidades.json());
 
-                //crea un estudiante. Error en la versión 2.6.0
+                //
                 post("/", Main.ACCEPT_TYPE_XML, (request, response) -> {
                     System.out.println("Ejecutado por la llamada XMl");
                     return new Estudiante(20011136, "aasdad");
