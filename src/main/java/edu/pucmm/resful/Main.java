@@ -1,6 +1,7 @@
 package edu.pucmm.resful;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import edu.pucmm.resful.encapsulaciones.ErrorRespuesta;
 import edu.pucmm.resful.encapsulaciones.Estudiante;
@@ -62,13 +63,18 @@ public class Main {
         path("/rest", () -> {
             //filtros especificos:
             afterAfter("/*", (request, response) -> { //indicando que todas las llamadas retorna un json.
-                if(request.headers("Accept").equalsIgnoreCase(ACCEPT_TYPE_XML)){
+                if(request.headers("Accept")!=null && request.headers("Accept").equalsIgnoreCase(ACCEPT_TYPE_XML)){
                     response.header("Content-Type", ACCEPT_TYPE_XML);
                 }else{
                     response.header("Content-Type", ACCEPT_TYPE_JSON);
                 }
 
             });
+
+            get("/", (request, response) -> {
+                return "RUTA API REST";
+            });
+
             //rutas del api
             path("/estudiantes", () -> {
 
@@ -80,7 +86,11 @@ public class Main {
 
                 //retorna un estudiante
                 get("/:matricula", (request, response) -> {
-                    return estudianteService.getEstudiante(Integer.parseInt(request.params("matricula")));
+                    Estudiante estudiante = estudianteService.getEstudiante(Integer.parseInt(request.params("matricula")));
+                    if(estudiante==null){
+                           throw new RuntimeException("No existe el cliente");
+                    }
+                    return  estudiante;
                 }, JsonUtilidades.json());
 
                 //crea un estudiante
