@@ -7,8 +7,6 @@ import edu.pucmm.resful.encapsulaciones.ErrorRespuesta;
 import edu.pucmm.resful.encapsulaciones.Estudiante;
 import edu.pucmm.resful.servicios.EstudianteService;
 import edu.pucmm.resful.utilidades.JsonUtilidades;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
 import spark.Request;
 import spark.Response;
 
@@ -32,10 +30,6 @@ public class Main {
         //Clase que representa el servicio.
         EstudianteService estudianteService = EstudianteService.getInstancia();
 
-        //Serializando XML.
-        Serializer serializer = new Persister();
-        
-
         //Manejo de Excepciones.
         exception(IllegalArgumentException.class, (exception, request, response) -> {
             manejarError(Main.BAD_REQUEST, exception, request, response);
@@ -55,7 +49,7 @@ public class Main {
 
         get("/prueba", (request, response) -> {
             ByteArrayOutputStream byteArrayOutputStream= new ByteArrayOutputStream();
-            serializer.write(estudianteService.getEstudiante(1), byteArrayOutputStream);
+            //serializer.write(estudianteService.getEstudiante(1), byteArrayOutputStream);
             return byteArrayOutputStream.toString();
         });
 
@@ -96,20 +90,7 @@ public class Main {
                 //crea un estudiante
                 post("/", Main.ACCEPT_TYPE_JSON, (request, response) -> {
 
-                    Estudiante estudiante = null;
-
-                    //verificando el tipo de dato.
-                    switch (request.headers("Content-Type")) {
-                        case Main.ACCEPT_TYPE_JSON:
-                            estudiante = new Gson().fromJson(request.body(), Estudiante.class);
-                            break;
-                        case Main.ACCEPT_TYPE_XML:
-                            //recibiendo el xml y convirtiendo a JSON.
-                            estudiante = serializer.read(Estudiante.class, request.body());
-                            break;
-                        default:
-                            throw new IllegalArgumentException("Error el formato no disponible");
-                    }
+                    Estudiante estudiante = new Gson().fromJson(request.body(), Estudiante.class);
 
                     return estudianteService.crearEstudiante(estudiante);
                 }, JsonUtilidades.json());
